@@ -1,3 +1,4 @@
+  
 . {
     param (
         [Parameter(Position=0)]
@@ -11,7 +12,7 @@
     $StackA = [System.Collections.Stack]::new()
     $StackB = [System.Collections.Stack]::new()
     
-    $Elements[-1..0].ForEach{
+    $Elements[($Elements.Length-1)..0].ForEach{
         $StackA.Push(@($_))
     }
 
@@ -30,5 +31,3 @@
     
     $StackA.ForEach{$_ -join ", "}
 } -Elements @("[red]", "[grn]", "[blu]") -Positions 3
-
-
