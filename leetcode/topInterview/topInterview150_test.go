@@ -41,7 +41,7 @@ func TestMergeSortedArray(t *testing.T) {
 		merge(datum.num1, datum.m, datum.num2, datum.n)
 
 		if !reflect.DeepEqual(datum.num1, datum.expected) {
-			t.Errorf("unexpected result for test index %d expected %+v 'got %+v", i, datum.expected, datum.num1)
+			t.Errorf("unexpected expected for test index %d expected %+v 'got %+v", i, datum.expected, datum.num1)
 		}
 	}
 }
@@ -84,7 +84,45 @@ func TestRemoveElement(t *testing.T) {
 		result := removeElement(datum.nums, datum.val)
 
 		if datum.expected.result != result || !reflect.DeepEqual(datum.nums[:len(datum.expected.numsAfter)], datum.expected.numsAfter) {
-			t.Errorf("unexpected result for test index %d expected %+v got [%+v, %+v ]", i, datum.expected, result, datum.nums[:len(datum.expected.numsAfter)])
+			t.Errorf("unexpected expected for test index %d expected %+v got [%+v, %+v ]", i, datum.expected, result, datum.nums[:len(datum.expected.numsAfter)])
+		}
+	}
+}
+
+func TestRemoveDuplicates(t *testing.T) {
+
+	data := []struct {
+		nums      []int
+		expected  int
+		numsAfter []int
+	}{
+		{
+			nums:      []int{1, 1, 2},
+			expected:  2,
+			numsAfter: []int{1, 2},
+		},
+		{
+			nums:      []int{0, 0, 1, 1, 1, 2, 2, 3, 3, 4},
+			expected:  5,
+			numsAfter: []int{0, 1, 2, 3, 4},
+		},
+		{
+			nums:      []int{},
+			expected:  0,
+			numsAfter: []int{},
+		},
+		{
+			nums:      []int{1},
+			expected:  1,
+			numsAfter: []int{1},
+		},
+	}
+
+	for i, datum := range data {
+		result := removeDuplicates(datum.nums)
+
+		if result != datum.expected || !reflect.DeepEqual(datum.nums[:datum.expected], datum.numsAfter) {
+			t.Errorf("unexpected result for test index %d expected [%+v, %+v] got [%+v, %+v]", i, datum.expected, datum.numsAfter, result, datum.numsAfter[:datum.expected])
 		}
 	}
 }

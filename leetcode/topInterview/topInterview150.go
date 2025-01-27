@@ -19,20 +19,20 @@ package topInterview
 // Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
 // Output: [1,2,2,3,5,6]
 // Explanation: The arrays we are merging are [1,2,3] and [2,5,6].
-// The result of the merge is [1,2,2,3,5,6] with the underlined elements coming from nums1.
+// The expected of the merge is [1,2,2,3,5,6] with the underlined elements coming from nums1.
 // Example 2:
 //
 // Input: nums1 = [1], m = 1, nums2 = [], n = 0
 // Output: [1]
 // Explanation: The arrays we are merging are [1] and [].
-// The result of the merge is [1].
+// The expected of the merge is [1].
 // Example 3:
 //
 // Input: nums1 = [0], m = 0, nums2 = [1], n = 1
 // Output: [1]
 // Explanation: The arrays we are merging are [] and [1].
-// The result of the merge is [1].
-// Note that because m = 0, there are no elements in nums1. The 0 is only there to ensure the merge result can fit in nums1.
+// The expected of the merge is [1].
+// Note that because m = 0, there are no elements in nums1. The 0 is only there to ensure the merge expected can fit in nums1.
 //
 // Вам даны два целочисленных массива nums1 и nums2, отсортированных в неубывающем порядке, и два целых числа m и n,
 // представляющих количество элементов в nums1 и nums2 соответственно.
@@ -139,4 +139,79 @@ func removeElement(nums []int, val int) int {
 
 	// Вернуть индекс
 	return insertIndex
+}
+
+// removeDuplicates
+//
+// 26. Remove Duplicates from Sorted Array
+// Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.
+//
+// Consider the number of unique elements of nums to be k, to get accepted, you need to do the following things:
+//
+// Change the array nums such that the first k elements of nums contain the unique elements in the order they were present in nums initially. The remaining elements of nums are not important as well as the size of nums.
+// Return k.
+// Custom Judge:
+//
+// The judge will test your solution with the following code:
+//
+// int[] nums = [...]; // Input array
+// int[] expectedNums = [...]; // The expected answer with correct length
+//
+// int k = removeDuplicates(nums); // Calls your implementation
+//
+// assert k == expectedNums.length;
+// for (int i = 0; i < k; i++) {
+// assert nums[i] == expectedNums[i];
+// }
+// If all assertions pass, then your solution will be accepted.
+//
+// Example 1:
+//
+// Input: nums = [1,1,2]
+// Output: 2, nums = [1,2,_]
+// Explanation: Your function should return k = 2, with the first two elements of nums being 1 and 2 respectively.
+// It does not matter what you leave beyond the returned k (hence they are underscores).
+// Example 2:
+//
+// Input: nums = [0,0,1,1,1,2,2,3,3,4]
+// Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+// Explanation: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively.
+// It does not matter what you leave beyond the returned k (hence they are underscores).
+//
+// Constraints:
+//
+// 1 <= nums.length <= 3 * 104
+// -100 <= nums[i] <= 100
+// nums is sorted in non-decreasing order.
+func removeDuplicates(nums []int) int {
+
+	// Инициировать переменную содержащую длину слайса nums
+	lenNums := len(nums)
+
+	// Если длина слайса nums меньше двух вернуть длину слайса
+	if lenNums < 2 {
+		return lenNums
+	}
+
+	// Инициализировать переменную содержащую индекс изменяемого элемента
+	insertIndex := 0
+
+	// Инициализировать переменную содержащую индекс проверяемого элемента
+	index := 1
+
+	// Прервать цикл когда индекс проверяемого элемента сравнялся с длиной слайса nums
+	for index < lenNums {
+		// Если элемент с индексом изменяемого элемента не равен элементу с индексом просматриваемого элемента
+		if nums[insertIndex] != nums[index] {
+			// Увеличить индекс изменяемого элемента на один
+			insertIndex++
+			// Прировнять значение элемента с индексом изменяемого элемента к значению проверяемого элемента
+			nums[insertIndex] = nums[index]
+		}
+		// Увеличить индекс проверяемого элемента на единицу
+		index++
+	}
+
+	// Вернуть индекс изменяемого элемента + 1
+	return insertIndex + 1
 }
