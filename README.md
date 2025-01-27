@@ -1,1 +1,1 @@
-In this repository I collect different tasks that I solve
+In this repository I collect different problems that I solve
