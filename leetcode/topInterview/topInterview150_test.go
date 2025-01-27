@@ -45,3 +45,46 @@ func TestMergeSortedArray(t *testing.T) {
 		}
 	}
 }
+
+func TestRemoveElement(t *testing.T) {
+
+	data := []struct {
+		nums     []int
+		val      int
+		expected struct {
+			result    int
+			numsAfter []int
+		}
+	}{
+		{
+			[]int{3, 2, 2, 3},
+			3,
+			struct {
+				result    int
+				numsAfter []int
+			}{
+				2,
+				[]int{2, 2},
+			},
+		},
+		{
+			[]int{0, 1, 2, 2, 3, 0, 4, 2},
+			2,
+			struct {
+				result    int
+				numsAfter []int
+			}{
+				5,
+				[]int{0, 1, 3, 0, 4},
+			},
+		},
+	}
+
+	for i, datum := range data {
+		result := removeElement(datum.nums, datum.val)
+
+		if datum.expected.result != result || !reflect.DeepEqual(datum.nums[:len(datum.expected.numsAfter)], datum.expected.numsAfter) {
+			t.Errorf("unexpected result for test index %d expected %+v got [%+v, %+v ]", i, datum.expected, result, datum.nums[:len(datum.expected.numsAfter)])
+		}
+	}
+}
