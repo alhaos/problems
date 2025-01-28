@@ -126,3 +126,77 @@ func TestRemoveDuplicates(t *testing.T) {
 		}
 	}
 }
+
+func TestRemoveDuplicatesII(t *testing.T) {
+
+	data := []struct {
+		nums      []int
+		expected  int
+		numsAfter []int
+	}{
+		{
+			nums:      []int{},
+			expected:  0,
+			numsAfter: []int{},
+		},
+		{
+			nums:      []int{1},
+			expected:  1,
+			numsAfter: []int{1},
+		},
+		{
+			nums:      []int{-9, -9, -2, -2, -2, 0, 0, 0, 1},
+			expected:  7,
+			numsAfter: []int{-9, -9, -2, -2, 0, 0, 1},
+		},
+		{
+			nums:      []int{1, 1, 1, 2, 2, 3},
+			expected:  5,
+			numsAfter: []int{1, 1, 2, 2, 3},
+		},
+		{
+			nums:      []int{0, 0, 1, 1, 1, 1, 2, 3, 3},
+			expected:  7,
+			numsAfter: []int{0, 0, 1, 1, 2, 3, 3},
+		},
+	}
+
+	for i, datum := range data {
+		result := removeDuplicatesII(datum.nums)
+
+		if result != datum.expected || !reflect.DeepEqual(datum.nums[:datum.expected], datum.numsAfter) {
+			t.Errorf("unexpected result for test index %d expected [%+v, %+v] got [%+v, %+v]", i, datum.expected, datum.numsAfter, result, datum.nums[:datum.expected])
+		}
+	}
+
+}
+
+func TestMajorityElement(t *testing.T) {
+	data := []struct {
+		nums     []int
+		expected int
+	}{
+		{
+			[]int{1},
+			1,
+		},
+
+		{
+			[]int{3, 2, 3},
+			3,
+		},
+		{
+			[]int{2, 2, 1, 1, 1, 2, 2},
+			2,
+		},
+	}
+
+	for i, datum := range data {
+
+		result := majorityElement(datum.nums)
+
+		if result != datum.expected {
+			t.Errorf("unexpected result for test index %d expected [%+v] got [%+v]", i, datum.expected, result)
+		}
+	}
+}

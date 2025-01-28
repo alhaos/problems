@@ -215,3 +215,153 @@ func removeDuplicates(nums []int) int {
 	// Вернуть индекс изменяемого элемента + 1
 	return insertIndex + 1
 }
+
+// removeDuplicates
+//
+// 80. Remove Duplicates from Sorted Array II
+// Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.
+//
+// Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.
+//
+// Return k after placing the final result in the first k slots of nums.
+//
+// Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.
+//
+// Custom Judge:
+//
+// The judge will test your solution with the following code:
+//
+// int[] nums = [...]; // Input array
+// int[] expectedNums = [...]; // The expected answer with correct length
+//
+// int k = removeDuplicates(nums); // Calls your implementation
+//
+// assert k == expectedNums.length;
+//
+//	for (int i = 0; i < k; i++) {
+//	    assert nums[i] == expectedNums[i];
+//	}
+//
+// If all assertions pass, then your solution will be accepted.
+//
+// Example 1:
+//
+// Input: nums = [1,1,1,2,2,3]
+// Output: 5, nums = [1,1,2,2,3,_]
+// Explanation: Your function should return k = 5, with the first five elements of nums being 1, 1, 2, 2 and 3 respectively.
+// It does not matter what you leave beyond the returned k (hence they are underscores).
+// Example 2:
+//
+// Input: nums = [0,0,1,1,1,1,2,3,3]
+// Output: 7, nums = [0,0,1,1,2,3,3,_,_]
+// Explanation: Your function should return k = 7, with the first seven elements of nums being 0, 0, 1, 1, 2, 3 and 3 respectively.
+// It does not matter what you leave beyond the returned k (hence they are underscores).
+//
+// Constraints:
+//
+// 1 <= nums.length <= 3 * 104
+// -104 <= nums[i] <= 104
+// nums is sorted in non-decreasing order.//
+func removeDuplicatesII(nums []int) int {
+
+	// Инициировать переменные
+	indexMutable := 0       // Индекс изменяемого элемента
+	indexChecked := 1       // Индекс проверяемого элемента
+	idDubFound := false     // Флаг, который указывает на то был ли уже найден дубликат
+	lengthNums := len(nums) // Длина слайса nums
+
+	// Если в слайсе nums меньше двух элементов
+	if lengthNums < 2 {
+		// Возвращаем длину слайса nums
+		return lengthNums
+	}
+
+	// Прервать цикл если индекс проверяемого элемента достиг длинны слайса
+	for indexChecked < lengthNums {
+
+		// Если изменяемый элемент и проверяемый элемент равны и дубликат ранее не найден
+		if nums[indexMutable] == nums[indexChecked] && idDubFound {
+			// Увеличить индекс проверяемого элемента на один
+			indexChecked++
+			// Прервать текущую итерацию цикла
+			continue
+		}
+
+		// Если изменяемый элемент и проверяемый элемент равны и дубликат ранее найден
+		if nums[indexMutable] == nums[indexChecked] && !idDubFound {
+			// Увеличить индекс изменяемого элемента на один
+			indexMutable++
+			// Изменить значение изменяемого элемента на значение проверяемого элемента
+			nums[indexMutable] = nums[indexChecked]
+			// Увеличить индекс проверяемого элемента на один
+			indexChecked++
+			// Установить признак того что дубликат найден
+			idDubFound = true
+			// Прервать текущую итерацию цикла
+			continue
+		}
+
+		// Если проверяемый элемент больше изменяемого
+		if nums[indexChecked] > nums[indexMutable] {
+			// Увеличить индекс изменяемого элемента на один
+			indexMutable++
+			// Изменить значение изменяемого элемента на значение проверяемого элемента
+			nums[indexMutable] = nums[indexChecked]
+			// Увеличить индекс проверяемого элемента на один
+			indexChecked++
+			// Сбросить признак того что дубликат найден
+			idDubFound = false
+		}
+	}
+	// Вернуть индекс изменяемого элемента + 1
+	return indexMutable + 1
+}
+
+// majorityElement
+//
+// 169. Majority Element
+// Given an array nums of size n, return the majority element.
+//
+// The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.
+//
+// Example 1:
+//
+// Input: nums = [3,2,3]
+// Output: 3
+// Example 2:
+//
+// Input: nums = [2,2,1,1,1,2,2]
+// Output: 2
+//
+// Constraints:
+//
+// n == nums.length
+// 1 <= n <= 5 * 104
+// -109 <= nums[i] <= 109//
+func majorityElement(nums []int) int {
+
+	// Инициировать переменную длинной слайса
+	lengthNums := len(nums)
+
+	// Инициировать карту, ключ - значение переменной в nums, значение - количество элемента в слайсе nums
+	elementsMap := make(map[int]int)
+
+	// Перебрать элементы в слайсе nums
+	for _, num := range nums {
+		// К значению ключа карты добавить единицу
+		elementsMap[num]++
+	}
+
+	// Перебрать карту
+	for k, v := range elementsMap {
+		// Если значение элемента больше половины длины слайса nums
+		if v > lengthNums/2 {
+			// вернуть ключ элемента
+			return k
+		}
+	}
+
+	// По условиям задачи мажорный элемент обязан быть
+	// и так как это код не должен быть достигнут тут паника
+	panic("no majority element found")
+}
