@@ -163,7 +163,6 @@ func TestRemoveDuplicatesII(t *testing.T) {
 
 	for i, datum := range data {
 		result := removeDuplicatesII(datum.nums)
-
 		if result != datum.expected || !reflect.DeepEqual(datum.nums[:datum.expected], datum.numsAfter) {
 			t.Errorf("unexpected result for test index %d expected [%+v, %+v] got [%+v, %+v]", i, datum.expected, datum.numsAfter, result, datum.nums[:datum.expected])
 		}
@@ -194,6 +193,123 @@ func TestMajorityElement(t *testing.T) {
 	for i, datum := range data {
 
 		result := majorityElement(datum.nums)
+
+		if result != datum.expected {
+			t.Errorf("unexpected result for test index %d expected [%+v] got [%+v]", i, datum.expected, result)
+		}
+	}
+}
+
+func TestRotate(t *testing.T) {
+
+	data := []struct {
+		nums        []int
+		k           int
+		numsMutated []int
+	}{
+		{
+			[]int{1, 2, 3, 4, 5, 6, 7},
+			3,
+			[]int{5, 6, 7, 1, 2, 3, 4},
+		},
+		{
+			[]int{1, 2, 3, 4, 5, 6, 7},
+			1,
+			[]int{7, 1, 2, 3, 4, 5, 6},
+		},
+		{
+			[]int{1, 2, 3, 4, 5, 6, 7},
+			2,
+			[]int{6, 7, 1, 2, 3, 4, 5},
+		},
+		{
+			[]int{-1, -100, 3, 99},
+			2,
+			[]int{3, 99, -1, -100},
+		},
+		{
+			[]int{-1, -100, 3, 99},
+			1,
+			[]int{99, -1, -100, 3},
+		},
+		{
+			[]int{-1, -100, 3, 99},
+			0,
+			[]int{-1, -100, 3, 99},
+		},
+		{
+			[]int{0},
+			99,
+			[]int{0},
+		},
+	}
+
+	for i, datum := range data {
+
+		rotate(datum.nums, datum.k)
+
+		if !reflect.DeepEqual(datum.nums, datum.numsMutated) {
+			t.Errorf("unexpected result for test index %d key was: %d expected [%+v] got [%+v]", i, datum.k, datum.numsMutated, datum.nums)
+		}
+	}
+}
+
+func TestMaxProfit(t *testing.T) {
+
+	data := []struct {
+		prices   []int
+		expected int
+	}{
+		{
+			[]int{7, 1, 5, 3, 6, 4},
+			5,
+		},
+		{
+			[]int{7, 6, 4, 3, 1},
+			0,
+		},
+		{
+			[]int{},
+			0,
+		},
+		{
+			[]int{0},
+			0,
+		},
+	}
+
+	for i, datum := range data {
+		result := maxProfit(datum.prices)
+
+		if result != datum.expected {
+			t.Errorf("unexpected result for test index %d expected [%+v] got [%+v]", i, datum.expected, result)
+		}
+	}
+}
+
+func TestMaxProfitII(t *testing.T) {
+
+	data := []struct {
+		prices   []int
+		expected int
+	}{
+		{
+			[]int{7, 1, 5, 3, 6, 4},
+			7,
+		},
+		{
+			[]int{1, 2, 3, 4, 5},
+			4,
+		},
+		{
+			[]int{7, 6, 4, 3, 1},
+			0,
+		},
+	}
+
+	for i, datum := range data {
+
+		result := maxProfitII(datum.prices)
 
 		if result != datum.expected {
 			t.Errorf("unexpected result for test index %d expected [%+v] got [%+v]", i, datum.expected, result)

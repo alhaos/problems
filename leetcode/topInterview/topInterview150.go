@@ -2,6 +2,8 @@
 
 package topInterview
 
+import "math"
+
 // merge problem
 //
 // 88. Merge Sorted Array
@@ -364,4 +366,159 @@ func majorityElement(nums []int) int {
 	// По условиям задачи мажорный элемент обязан быть
 	// и так как это код не должен быть достигнут тут паника
 	panic("no majority element found")
+}
+
+// rotate
+//
+// 189. Rotate Array
+//
+// Given an integer array nums, rotate the array to the right by k steps, where k is non-negative.
+//
+// Example 1:
+//
+// Input: nums = [1,2,3,4,5,6,7], k = 3
+// Output: [5,6,7,1,2,3,4]
+// Explanation:
+// rotate 1 steps to the right: [7,1,2,3,4,5,6]
+// rotate 2 steps to the right: [6,7,1,2,3,4,5]
+// rotate 3 steps to the right: [5,6,7,1,2,3,4]
+// Example 2:
+//
+// Input: nums = [-1,-100,3,99], k = 2
+// Output: [3,99,-1,-100]
+// Explanation:
+// rotate 1 steps to the right: [99,-1,-100,3]
+// rotate 2 steps to the right: [3,99,-1,-100]
+//
+// Constraints:
+//
+// 1 <= nums.length <= 105
+// -231 <= nums[i] <= 231 - 1
+// 0 <= k <= 105
+func rotate(nums []int, k int) {
+	// Инициализировать переменную длинной слайса nums
+	lengthNums := len(nums)
+	// Инициализировать переменную остатком от деления количества шагов на длину слайса
+	remainder := k % lengthNums
+	// Скопировать в nums результат объединения части слайса nums от разности
+	// длины слайса и остатка с каждым элементом части слайса от начала до разности длины с остатком
+	copy(nums, append(nums[lengthNums-remainder:], nums[:lengthNums-remainder]...))
+}
+
+// maxProfit
+//
+// 121. Best Time to Buy and Sell Stock
+// Solved
+// Easy
+// Topics
+// Companies
+// You are given an array prices where prices[i] is the price of a given stock on the ith day.
+//
+// You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+//
+// Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+//
+// Example 1:
+//
+// Input: prices = [7,1,5,3,6,4]
+// Output: 5
+// Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+// Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+// Example 2:
+//
+// Input: prices = [7,6,4,3,1]
+// Output: 0
+// Explanation: In this case, no transactions are done and the max profit = 0.
+//
+// Constraints:
+//
+// 1 <= prices.length <= 105
+// 0 <= prices[i] <= 104
+func maxProfit(prices []int) int {
+	// Инициировать переменную содержащую минимальную цену максимальным возможным int64
+	minPrice := math.MaxInt64
+	// Инициировать переменную содержащую максимально возможным прибыли нулем
+	maxProfitValue := 0
+	// Перебрать цены
+	for _, price := range prices {
+		// Если текущая цена меньше минимальной цены
+		if price < minPrice {
+			// Минимальная цена равна текущей цене
+			minPrice = price
+		}
+		// Прибыль равна разности текущей цены и минимальной
+		profit := price - minPrice
+		// Если прибыль больше максимально возможной прибыли
+		if profit > maxProfitValue {
+			// Обновить значение максимально возможной прибыли текущей
+			maxProfitValue = profit
+		}
+	}
+	// Вернуть максимально возможную прибыль
+	return maxProfitValue
+}
+
+// maxProfitII
+//
+// 122. Best Time to Buy and Sell Stock II
+//
+// You are given an integer array prices where prices[i] is the price of a given stock on the ith day.
+//
+// On each day, you may decide to buy and/or sell the stock. You can only hold at most one share of the stock at any time. However, you can buy it then immediately sell it on the same day.
+//
+// Find and return the maximum profit you can achieve.
+//
+// Example 1:
+//
+// Input: prices = [7,1,5,3,6,4]
+// Output: 7
+// Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4.
+// Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 6-3 = 3.
+// Total profit is 4 + 3 = 7.
+// Example 2:
+//
+// Input: prices = [1,2,3,4,5]
+// Output: 4
+// Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+// Total profit is 4.
+// Example 3:
+//
+// Input: prices = [7,6,4,3,1]
+// Output: 0
+// Explanation: There is no way to make a positive profit, so we never buy the stock to achieve the maximum profit of 0.
+//
+// Constraints:
+//
+// 1 <= prices.length <= 3 * 104
+// 0 <= prices[i] <= 104
+func maxProfitII(prices []int) int {
+
+	// Инициировать накопленную прибыль
+	profit := 0
+
+	// Инициировать индекс текущей цены
+	index := 1
+
+	// Инициировать цикл
+	for {
+
+		// Если индекс достиг длины слайса цен
+		if index >= len(prices) {
+
+			// Прервать цикл
+			break
+		}
+
+		// Если текущая цена больше предыдущей
+		if prices[index] > prices[index-1] {
+
+			// Прибавить к накопленной прибыли разность между текущей ценой и предыдущей
+			profit += prices[index] - prices[index-1]
+		}
+
+		// Увеличить индекс текущей цены на один
+		index++
+	}
+	// Вернуть накопленную прибыль
+	return profit
 }
