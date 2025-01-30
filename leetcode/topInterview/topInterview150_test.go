@@ -316,3 +316,41 @@ func TestMaxProfitII(t *testing.T) {
 		}
 	}
 }
+
+func TestCanJump(t *testing.T) {
+
+	data := []struct {
+		mums     []int
+		expected bool
+	}{
+		{
+			[]int{0},
+			true,
+		},
+		{
+			[]int{0, 0},
+			false,
+		},
+		{
+			[]int{},
+			false,
+		},
+		{
+			[]int{2, 3, 1, 1, 4},
+			true,
+		},
+		{
+			[]int{3, 2, 1, 0, 4},
+			false,
+		},
+	}
+
+	for i, datum := range data {
+
+		result := canJump(datum.mums)
+
+		if result != datum.expected {
+			t.Errorf("unexpected result for test index %d expected [%+v] got [%+v]", i, datum.expected, result)
+		}
+	}
+}
