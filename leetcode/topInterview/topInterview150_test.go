@@ -379,3 +379,29 @@ func TestJump(t *testing.T) {
 		}
 	}
 }
+
+func TestHIndex(t *testing.T) {
+
+	data := []struct {
+		citations []int
+		expected  int
+	}{
+		{
+			[]int{3, 0, 6, 1, 5},
+			3,
+		},
+		{
+			[]int{1, 3, 1},
+			1,
+		},
+	}
+
+	for i, datum := range data {
+
+		result := hIndex(datum.citations)
+
+		if result != datum.expected {
+			t.Errorf("unexpected result for test index %d expected [%+v] got [%+v]", i, datum.expected, result)
+		}
+	}
+}

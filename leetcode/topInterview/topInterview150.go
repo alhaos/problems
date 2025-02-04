@@ -2,7 +2,11 @@
 
 package topInterview
 
-import "math"
+import (
+	"math"
+	"math/rand"
+	"sort"
+)
 
 // merge problem
 //
@@ -653,4 +657,175 @@ func jump(nums []int) int {
 	}
 	// Вернуть счетчик прыжков
 	return jumps
+}
+
+// hIndex
+//
+// 274. H-Index
+// Medium
+// Topics
+// Companies
+// Hint
+// Given an array of integers citations where citations[i] is the number of citations a researcher received for their ith paper, return the researcher's h-index.
+//
+// According to the definition of h-index on Wikipedia: The h-index is defined as the maximum value of h such that the given researcher has published at least h papers that have each been cited at least h times.
+//
+// Example 1:
+//
+// Input: citations = [3,0,6,1,5]
+// Output: 3
+// Explanation: [3,0,6,1,5] means the researcher has 5 papers in total and each of them had received 3, 0, 6, 1, 5 citations respectively.
+// Since the researcher has 3 papers with at least 3 citations each and the remaining two with no more than 3 citations each, their h-index is 3.
+// Example 2:
+//
+// Input: citations = [1,3,1]
+// Output: 1
+//
+// Constraints:
+//
+// n == citations.length
+// 1 <= n <= 5000
+// 0 <= citations[i] <= 1000//
+func hIndex(citations []int) int {
+
+	// Воспользуюсь сортировкой целочисленных слайсов с произвольной функцией сортировки
+	// Отсортировать слайс по убыванию
+	sort.Slice(citations, func(i, j int) bool {
+		return citations[i] > citations[j]
+	})
+
+	// Переменная hIndexValue содержит крайний h-индекс подходящий под критерии
+	hIndexValue := 0
+	// Цикл range по элементам слайса citations
+	// i индекс текущего элемента слайса
+	// v значение текущего элемента слайса
+	for i, v := range citations {
+		// если значение текущего элемента слайса больше индекса элемента
+		if v >= i+1 {
+			// Обновляем hIndexValue становится индексом текущего элемента плюс единица так как чети индекса ведется с единицы
+			hIndexValue = i + 1
+			// Прервать итерацию цикла
+			continue
+		}
+		// Прервать цикл
+		break
+	}
+
+	// Вернуть значение h-индекса
+	return hIndexValue
+}
+
+// RandomizedSet 380. Insert Delete GetRandom O(1)
+// Implement the RandomizedSet class:
+//
+// RandomizedSet() Initializes the RandomizedSet object.
+// bool insert(int val) Inserts an item val into the set if not present. Returns true if the item was not present, false otherwise.
+// bool remove(int val) Removes an item val from the set if present. Returns true if the item was present, false otherwise.
+// int getRandom() Returns a random element from the current set of elements (it's guaranteed that at least one element exists when this method is called). Each element must have the same probability of being returned.
+// You must implement the functions of the class such that each function works in average O(1) time complexity.
+//
+// Example 1:
+//
+// Input
+// ["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"]
+// [[], [1], [2], [2], [], [1], [2], []]
+// Output
+// [null, true, false, true, 2, true, false, 2]
+//
+// Explanation
+// RandomizedSet randomizedSet = new RandomizedSet();
+// randomizedSet.insert(1); // Inserts 1 to the set. Returns true as 1 was inserted successfully.
+// randomizedSet.remove(2); // Returns false as 2 does not exist in the set.
+// randomizedSet.insert(2); // Inserts 2 to the set, returns true. Set now contains [1,2].
+// randomizedSet.getRandom(); // getRandom() should return either 1 or 2 randomly.
+// randomizedSet.remove(1); // Removes 1 from the set, returns true. Set now contains [2].
+// randomizedSet.insert(2); // 2 was already in the set, so return false.
+// randomizedSet.getRandom(); // Since 2 is the only number in the set, getRandom() will always return 2.
+//
+// Constraints:
+//
+// -231 <= val <= 231 - 1
+// At most 2 * 105 calls will be made to insert, remove, and getRandom.
+// There will be at least one element in the data structure when getRandom is called.
+
+// RandomizedSet структура содержащая данные
+type RandomizedSet struct {
+	elements        []int       // слайс элементов
+	elementIndexMap map[int]int // карта содержащая значение элемента и массив элемента
+}
+
+// Constructor конструктор для структуры RandomizedSet
+func Constructor() RandomizedSet {
+	// Вернуть RandomizedSet
+	return RandomizedSet{
+		elements:        []int{},           // Поле elements инициировать пустым слайсом целочисленных элементов
+		elementIndexMap: make(map[int]int), // Создать пустую карту
+	}
+}
+
+// Insert вставляет элемент при отсутствии данного элемента
+// Возвращает ИСТИНУ в случае успеха, ЛОЖЬ в противоположном
+func (this *RandomizedSet) Insert(val int) bool {
+
+	// Инициировать exist бинарным признаком наличия элемента в карте элементов
+	_, exist := this.elementIndexMap[val]
+	// В случае наличия элемента
+	if exist {
+		// Вернуть ЛОЖЬ
+		return false
+	}
+
+	// Добавить элемент в слайс элементов
+	this.elements = append(this.elements, val)
+
+	// Добавить элемент в карту индексов элементов
+	this.elementIndexMap[val] = len(this.elements) - 1
+
+	// Вернуть ИСТИНУ
+	return true
+}
+
+// Remove удаляет элемент при наличии данного элемента
+// Возвращает ИСТИНУ в случае успеха, ЛОЖЬ в противоположном
+func (this *RandomizedSet) Remove(val int) bool {
+
+	// Инициировать exist бинарным признаком наличия элемента в карте элементов
+	_, exist := this.elementIndexMap[val]
+	// В случае отсутствия элемента
+	if !exist {
+		// Вернуть ЛОЖЬ
+		return false
+	}
+
+	// Определить индекс элемента по карте
+	index := this.elementIndexMap[val]
+
+	// Заменить значение элемента с индексом index на значение крайнего элемента в слайсе элементов
+	this.elements[index] = this.elements[len(this.elements)-1]
+
+	// Заменить значение индекса, нового значения элемента в карте индексов элементов
+	this.elementIndexMap[this.elements[index]] = index
+
+	// Переопределить слайс элементов им же без крайнего элемента
+	this.elements = this.elements[:len(this.elements)-1]
+
+	// Удалить элемент из карты элементов
+	delete(this.elementIndexMap, val)
+
+	// Вернуть ИСТИНУ
+	return true
+}
+
+// GetRandom возвращает случайный элемент
+func (this *RandomizedSet) GetRandom() int {
+	// Проверить наличие элементов в слайсе
+	if len(this.elements) == 0 {
+		// Вернуть ноль
+		return 0
+	}
+	// Получить индекс случайного элемента
+	index := rand.Intn(len(this.elements))
+
+	// Вернуть значение случайного элемента
+	return this.elements[index]
 }
