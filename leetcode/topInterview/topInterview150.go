@@ -579,3 +579,78 @@ func canJump(nums []int) bool {
 	// Вернуть ложь
 	return false
 }
+
+// jump
+//
+// 45. Jump Game II
+//
+// You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
+//
+// Each element nums[i] represents the maximum length of a forward jump from index i. In other words, if you are at nums[i], you can jump to any nums// [i + j] where:
+//
+// 0 <= j <= nums[i] and
+// i + j < n
+// Return the minimum number of jumps to reach nums[n - 1]. The test cases are generated such that you can reach nums[n - 1].
+//
+// Example 1:
+//
+// Input: nums = [2,3,1,1,4]
+// Output: 2
+// Explanation: The minimum number of jumps to reach the last index is 2. Jump 1 step from index 0 to 1, then 3 steps to the last index.
+// Example 2:
+//
+// Input: nums = [2,3,0,1,4]
+// Output: 2
+//
+// Constraints:
+//
+// 1 <= nums.length <= 104
+// 0 <= nums[i] <= 1000
+// It's guaranteed that you can reach nums[n - 1].
+func jump(nums []int) int {
+
+	// lastNumsIndex содержит крайний индекс слайса
+	lastNumsIndex := len(nums) - 1
+
+	// currentAvailableIndex содержит индекс элемента до которого мы можем допрыгнуть в текущей итерации цикла
+	currentAvailableIndex := 0
+
+	// farthestAvailableIndex содержит индекс самого дальнего элемента из обнаруженных за все предыдущие итерации цикла
+	farthestAvailableIndex := 0
+
+	// jumps счетчик прыжков
+	jumps := 0
+
+	// index итерируемого элемента цикла
+	index := 0
+
+	for {
+
+		// Обновить элемент до которого можно допрыгнуть вообще, учитывая предыдущие итерации цикла
+		farthestAvailableIndex = max(farthestAvailableIndex, index+nums[index])
+
+		// Если элемент до которого можно допрыгнуть равен крайнему элементу - цель достигнута
+		if farthestAvailableIndex >= lastNumsIndex {
+			// Увеличить счетчик прыжков на один
+			jumps++
+			// Прервать цикл
+			break
+		}
+
+		// Если текущий индекс равен индексу элемента до которого мы можем допрыгнуть за эту
+		// итерацию - значит мы дошли в тупик, но по условия задачи гарантируется наличие пути к крайнему
+		// элементу
+		if index == currentAvailableIndex {
+			// Увеличить счетчик прыжков на один
+			jumps++
+			// Индекс элемента до которого можно допрыгнуть приравнять
+			// к индексу наиболее дальнего элемента который найден за все предыдущие итерации цикла
+			currentAvailableIndex = farthestAvailableIndex
+		}
+
+		// Увеличить текущий индекс на единицу
+		index++
+	}
+	// Вернуть счетчик прыжков
+	return jumps
+}

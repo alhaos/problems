@@ -354,3 +354,28 @@ func TestCanJump(t *testing.T) {
 		}
 	}
 }
+
+func TestJump(t *testing.T) {
+	data := []struct {
+		mums     []int
+		expected int
+	}{
+		{
+			[]int{2, 3, 1, 1, 4},
+			2,
+		},
+		{
+			[]int{2, 3, 0, 1, 4},
+			2,
+		},
+	}
+
+	for i, datum := range data {
+
+		result := jump(datum.mums)
+
+		if result != datum.expected {
+			t.Errorf("unexpected result for test index %d expected [%+v] got [%+v]", i, datum.expected, result)
+		}
+	}
+}
