@@ -1,0 +1,4 @@
+# This file is used internally by FFMPEG.
+file 'file:D:/repo/problems/misc/presentation/tmp/media/videos/tmp/1080p60/partial_movie_files/SwapCircular/3529212410_1432596116_3078698859.mp4'
+file 'file:D:/repo/problems/misc/presentation/tmp/media/videos/tmp/1080p60/partial_movie_files/SwapCircular/3040924799_1764437854_414316941.mp4'
+file 'file:D:/repo/problems/misc/presentation/tmp/media/videos/tmp/1080p60/partial_movie_files/SwapCircular/3040924799_4247107814_1496748197.mp4'

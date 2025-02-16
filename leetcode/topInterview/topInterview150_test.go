@@ -405,3 +405,27 @@ func TestHIndex(t *testing.T) {
 		}
 	}
 }
+
+func TestProductExceptSelf(t *testing.T) {
+	data := []struct {
+		nums     []int
+		expected []int
+	}{
+		{
+			[]int{1, 2, 3, 4},
+			[]int{24, 12, 8, 6},
+		},
+		{
+			[]int{-1, 1, 0, -3, 3},
+			[]int{0, 0, 9, 0, 0},
+		},
+	}
+	for i, datum := range data {
+
+		result := productExceptSelf(datum.nums)
+
+		if !reflect.DeepEqual(result, datum.expected) {
+			t.Errorf("unexpected result for test index %d expected [%+v] got [%+v]", i, datum.expected, result)
+		}
+	}
+}
