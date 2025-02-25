@@ -429,3 +429,279 @@ func TestProductExceptSelf(t *testing.T) {
 		}
 	}
 }
+
+func TestCanCompleteCircuit(t *testing.T) {
+	data := []struct {
+		gas      []int
+		cost     []int
+		expected int
+	}{
+		{
+			[]int{1, 2, 3, 4, 5},
+			[]int{3, 4, 5, 1, 2},
+			3,
+		},
+		{
+			[]int{2, 3, 4},
+			[]int{3, 4, 3},
+			-1,
+		},
+	}
+
+	for i, datum := range data {
+		result := canCompleteCircuit(datum.gas, datum.cost)
+
+		if result != datum.expected {
+			t.Errorf("unexpected result for test index %d expected [%d] got [%d]", i, datum.expected, result)
+		}
+	}
+}
+
+func TestCandy(t *testing.T) {
+	data := []struct {
+		ratings  []int
+		expected int
+	}{
+		{
+			[]int{1, 0, 2},
+			5,
+		},
+		{
+			[]int{1, 2, 2},
+			4,
+		},
+		{
+			[]int{1, 3, 2, 2, 1},
+			7,
+		},
+		{
+			[]int{1, 2, 87, 87, 87, 2, 1},
+			13,
+		}, {
+			[]int{1, 3, 4, 5, 2},
+			11,
+		},
+	}
+
+	for i, datum := range data {
+		result := candy(datum.ratings)
+
+		if result != datum.expected {
+			t.Errorf("unexpected result for test index %d expected [%d] got [%d]", i, datum.expected, result)
+		}
+	}
+}
+
+func TestTrap(t *testing.T) {
+
+	data := []struct {
+		height   []int
+		expected int
+	}{
+		{
+			[]int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1},
+			6,
+		},
+		{
+			[]int{4, 2, 0, 3, 2, 5},
+			9,
+		},
+	}
+
+	for i, datum := range data {
+		result := trap(datum.height)
+
+		if result != datum.expected {
+			t.Errorf(
+				"unexpected result for test data index %d (%+v), expected [%d], but got [%d]",
+				i,
+				datum.height,
+				datum.expected,
+				result,
+			)
+		}
+	}
+}
+
+func TestRomanToInt(t *testing.T) {
+
+	data := []struct {
+		s        string
+		expected int
+	}{
+		{"III", 3},
+		{"LVIII", 58},
+		{"MCMXCIV", 1994},
+	}
+
+	for i, datum := range data {
+		result := romanToInt(datum.s)
+
+		if result != datum.expected {
+			t.Errorf(
+				"unexpected result for test data index %d (%strs), expected [%d], but got [%d]",
+				i,
+				datum.s,
+				datum.expected,
+				result,
+			)
+		}
+	}
+}
+
+func TestIntToRoman(t *testing.T) {
+
+	data := []struct {
+		num      int
+		expected string
+	}{
+		{3749, "MMMDCCXLIX"},
+		{58, "LVIII"},
+		{1994, "MCMXCIV"},
+	}
+
+	for i, datum := range data {
+		result := intToRoman(datum.num)
+
+		if result != datum.expected {
+			t.Errorf(
+				"unexpected result for test data index %d (%d), expected [%strs], but got [%strs]",
+				i,
+				datum.num,
+				datum.expected,
+				result,
+			)
+		}
+	}
+}
+
+func TestLengthOfLastWord(t *testing.T) {
+	data := []struct {
+		s        string
+		expected int
+	}{
+		{"Hello World", 5},
+		{"   fly me   to   the moon  ", 4},
+		{"luffy is still joyboy", 6},
+	}
+
+	for i, datum := range data {
+		result := lengthOfLastWord(datum.s)
+
+		if result != datum.expected {
+			t.Errorf(
+				"unexpected result for test data index %d (%strs), expected [%d], but got [%d]",
+				i,
+				datum.s,
+				datum.expected,
+				result,
+			)
+		}
+	}
+}
+
+func TestLongestCommonPrefix(t *testing.T) {
+	data := []struct {
+		strs     []string
+		expected string
+	}{
+		{[]string{"flower", "flow", "flight"}, "fl"},
+		{[]string{"dog", "racecar", "car"}, ""},
+	}
+
+	for i, datum := range data {
+		result := longestCommonPrefix(datum.strs)
+
+		if result != datum.expected {
+			t.Errorf(
+				"unexpected result for test data index %d (%+v), expected [%s], but got [%s]",
+				i,
+				datum.strs,
+				datum.expected,
+				result,
+			)
+		}
+	}
+}
+
+func TestReverseWords(t *testing.T) {
+	data := []struct {
+		s        string
+		expected string
+	}{
+		{"the sky is blue", "blue is sky the"},
+		{"  hello world  ", "world hello"},
+		{"a good   example", "example good a"},
+		{"Привет мир こんにちは 世界 🚀", "🚀 世界 こんにちは мир Привет"},
+	}
+
+	for i, datum := range data {
+		result := reverseWords(datum.s)
+
+		if result != datum.expected {
+			t.Errorf(
+				"unexpected result for test data index %d (%s), expected [%s], but got [%s]",
+				i,
+				datum.s,
+				datum.expected,
+				result,
+			)
+		}
+	}
+}
+
+func TestConvert(t *testing.T) {
+	data := []struct {
+		s        string
+		rowNums  int
+		expected string
+	}{
+		{"PAYPALISHIRING", 3, "PAHNAPLSIIGYIR"},
+		{"PAYPALISHIRING", 4, "PINALSIGYAHRPI"},
+		{"A", 1, "A"},
+		{"AB", 1, "AB"},
+	}
+
+	for i, datum := range data {
+		result := convert(datum.s, datum.rowNums)
+
+		if result != datum.expected {
+			t.Errorf(
+				"unexpected result for test data index %d (%s), expected [%s], but got [%s]",
+				i,
+				datum.s,
+				datum.expected,
+				result,
+			)
+		}
+	}
+}
+
+func TestStrStr(t *testing.T) {
+	data := []struct {
+		haystack string
+		needle   string
+		expected int
+	}{
+		{"sadbutsad", "sad", 0},
+		{"leetcode", "leeto", -1},
+		{"abc", "c", 2},
+		{"mississippi", "issip", 4},
+	}
+
+	for i, datum := range data {
+
+		result := strStr(datum.haystack, datum.needle)
+
+		if result != datum.expected {
+			t.Errorf(
+				"unexpected result for test data index %d (haystack:%s, needle:%s), expected [%d], but got [%d]",
+				i,
+				datum.haystack,
+				datum.needle,
+				datum.expected,
+				result,
+			)
+		}
+	}
+}

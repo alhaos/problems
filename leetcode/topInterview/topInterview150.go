@@ -3,9 +3,11 @@
 package topInterview
 
 import (
+	"bytes"
 	"math"
 	"math/rand"
 	"sort"
+	"strings"
 )
 
 // merge problem
@@ -530,7 +532,7 @@ func maxProfitII(prices []int) int {
 // canJump
 //
 // 55. Jump Game
-// You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
+// You are given an integer array nums. You are initially positioned at the array'strs first index, and each element in the array represents your maximum jump length at that position.
 //
 // Return true if you can reach the last index, or false otherwise.
 //
@@ -610,7 +612,7 @@ func canJump(nums []int) bool {
 //
 // 1 <= nums.length <= 104
 // 0 <= nums[i] <= 1000
-// It's guaranteed that you can reach nums[n - 1].
+// It'strs guaranteed that you can reach nums[n - 1].
 func jump(nums []int) int {
 
 	// lastNumsIndex содержит крайний индекс слайса
@@ -666,7 +668,7 @@ func jump(nums []int) int {
 // Topics
 // Companies
 // Hint
-// Given an array of integers citations where citations[i] is the number of citations a researcher received for their ith paper, return the researcher's h-index.
+// Given an array of integers citations where citations[i] is the number of citations a researcher received for their ith paper, return the researcher'strs h-index.
 //
 // According to the definition of h-index on Wikipedia: The h-index is defined as the maximum value of h such that the given researcher has published at least h papers that have each been cited at least h times.
 //
@@ -723,7 +725,7 @@ func hIndex(citations []int) int {
 // RandomizedSet() Initializes the RandomizedSet object.
 // bool insert(int val) Inserts an item val into the set if not present. Returns true if the item was not present, false otherwise.
 // bool remove(int val) Removes an item val from the set if present. Returns true if the item was present, false otherwise.
-// int getRandom() Returns a random element from the current set of elements (it's guaranteed that at least one element exists when this method is called). Each element must have the same probability of being returned.
+// int getRandom() Returns a random element from the current set of elements (it'strs guaranteed that at least one element exists when this method is called). Each element must have the same probability of being returned.
 // You must implement the functions of the class such that each function works in average O(1) time complexity.
 //
 // Example 1:
@@ -909,4 +911,722 @@ func productExceptSelf(nums []int) []int {
 
 	// Вернуть промежуточный слайс
 	return output
+}
+
+// canCompleteCircuit
+//
+// 134. Gas Station
+//
+// There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
+//
+// You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next (i + 1)th station. You begin the journey with an empty tank at one of the gas stations.
+//
+// Given two integer arrays gas and cost, return the starting gas station'strs index if you can travel around the circuit once in the clockwise direction, otherwise return -1. If there exists a  solution, it is guaranteed to be unique.
+//
+// Example 1:
+//
+// Input: gas = [1,2,3,4,5], cost = [3,4,5,1,2]
+// Output: 3
+// Explanation:
+// Start at station 3 (index 3) and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
+// Travel to station 4. Your tank = 4 - 1 + 5 = 8
+// Travel to station 0. Your tank = 8 - 2 + 1 = 7
+// Travel to station 1. Your tank = 7 - 3 + 2 = 6
+// Travel to station 2. Your tank = 6 - 4 + 3 = 5
+// Travel to station 3. The cost is 5. Your gas is just enough to travel back to station 3.
+// Therefore, return 3 as the starting index.
+// Example 2:
+//
+// Input: gas = [2,3,4], cost = [3,4,3]
+// Output: -1
+// Explanation:
+// You can't start at station 0 or 1, as there is not enough gas to travel to the next station.
+// Let'strs start at station 2 and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
+// Travel to station 0. Your tank = 4 - 3 + 2 = 3
+// Travel to station 1. Your tank = 3 - 3 + 3 = 3
+// You cannot travel back to station 2, as it requires 4 unit of gas but you only have 3.
+// Therefore, you can't travel around the circuit once no matter where you start.
+//
+// Constraints:
+//
+// n == gas.length == cost.length
+// 1 <= n <= 105
+// 0 <= gas[i], cost[i] <= 104
+func canCompleteCircuit(gas []int, cost []int) int {
+
+	sumGas := 0 // Сюда суммирую элементы слайса gas
+	for _, n := range gas {
+		sumGas += n
+	}
+
+	sumCost := 0 // Сюда суммирую элементы слайса cost
+	for _, n := range cost {
+		sumCost += n
+	}
+
+	// Пути нет в том случае если сумма топлива меньше суммы топлива необходимого на перемещение
+	if sumGas < sumCost {
+		return -1
+	}
+
+	tank := 0           // Количество топлива в баке
+	iterationIndex := 0 // Индекс итерации по слайсу
+	startIndex := 0     // Индекс элемента с которого возможно начать путь
+
+	// Прерываю цикл когда все элементы перебраны
+	for len(gas) > iterationIndex {
+		// Количество топлива в баке равно оставшееся топливо полюс топлива наи итерируемой станции
+		// минус количество топлива необходимое чтобы добраться до следующей станции.
+		tank += gas[iterationIndex] - cost[iterationIndex]
+		// Если расчетное количество топлива в баке меньше нуля
+		if tank < 0 {
+			// Обнулить количество топлива в баке
+			tank = 0
+			// Начать путь со следующего индекса
+			startIndex = iterationIndex + 1
+		}
+		// Инкрементировать индекс итерации
+		iterationIndex++
+	}
+
+	// Вернуть индекс начала пусти
+	return startIndex
+}
+
+// candy
+//
+// 135. Candy
+// There are n children standing in a line. Each child is assigned a rating value given in the integer array ratings.
+//
+// You are giving candies to these children subjected to the following requirements:
+//
+// Each child must have at least one candy.
+// Children with a higher rating get more candies than their neighbors.
+// Return the minimum number of candies you need to have to distribute the candies to the children.
+//
+// Example 1:
+//
+// Input: ratings = [1,0,2]
+// Output: 5
+// Explanation: You can allocate to the first, second and third child with 2, 1, 2 candies respectively.
+// Example 2:
+//
+// Input: ratings = [1,2,2]
+// Output: 4
+// Explanation: You can allocate to the first, second and third child with 1, 2, 1 candies respectively.
+// The third child gets 1 candy because it satisfies the above two conditions.
+//
+// Constraints:
+//
+// n == ratings.length
+// 1 <= n <= 2 * 104
+// 0 <= ratings[i] <= 2 * 104
+func candy(ratings []int) int {
+
+	// Length содержит длину массива ratings
+	length := len(ratings)
+
+	// Создаем слайс для подсчета и сравнения полученных конфет
+	candies := make([]int, length)
+
+	// Раздаем по конфете
+	// Условие "Each child must have at least one candy."
+	for i, _ := range candies {
+		candies[i] = 1
+	}
+
+	// Обходим слайс слева направо до предпоследнего элемента
+	for i := range length - 1 {
+		// Если рейтинг текущего ребенка меньше рейтинга ребенка справа
+		if ratings[i] < ratings[i+1] {
+			// Ребенок справа получает на одну конфету больше чем есть у текущего ребенка
+			candies[i+1] = candies[i] + 1
+		}
+	}
+
+	// Обходим слайс справа налево до второго элемента
+	for i := length - 1; i > 0; i-- {
+		// Если у текущего ребенка рейтинг ниже чему у ребенка слева
+		// и у конфет у текущего ребенка больше или столько же как у ребенка слева
+		if ratings[i] < ratings[i-1] && candies[i] >= candies[i-1] {
+			// У ребенка слева становится конфет больше на одну чем у текущего
+			candies[i-1] = candies[i] + 1
+		}
+	}
+
+	// Возвращаем сумму конфет
+	sum := 0
+	for _, n := range candies {
+		sum += n
+	}
+	return sum
+}
+
+// trap
+//
+// 42. Trapping Rain Water
+//
+// Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+//
+// Example 1:
+//
+// Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+// Output: 6
+// Explanation: The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.
+//
+// Example 2:
+//
+// Input: height = [4,2,0,3,2,5]
+// Output: 9
+//
+// Constraints:
+//
+// n == height.length
+// 1 <= n <= 2 * 104
+// 0 <= height[i] <= 105//
+func trap(height []int) int {
+
+	// length содержит длину слайса height
+	length := len(height)
+
+	// Далее инициализируются переменные ссылающиеся на первый элемент слайса
+	// и на последний, надо проверить что эти элементы есть чтобы не было паники
+	if length == 0 {
+		return 0
+	}
+
+	// left, right Указатели на текущие элементы справа и слева
+	left, right := 0, length-1
+
+	// leftMax, rightMax обнаруженные максимумы слева и справа
+	leftMax, rightMax := height[left], height[right]
+
+	// water Общее количество воды
+	water := 0
+
+	// Обходим слайс пока не сравняются указатели
+	for left < right {
+
+		// Если текущая значение слева меньше текущего значения справа
+		if height[left] < height[right] {
+			// Если текущее значение слева больше или равно обнаруженного на текущий момент
+			// максимума слева
+			if height[left] >= leftMax {
+				// Обнаруженный максимум слева равен ткущему элементу
+				leftMax = height[left]
+			} else { // Если текущий элемент слева меньше чем текущий элемент справа
+				// Повышаем общий уровень воды на разность обнаруженного максимума
+				// слева и значения текущего элемента слева
+				water += leftMax - height[left]
+			}
+			// Увеличиваем указатель на левый элемент
+			left++
+		} else { // Если правый элемент меньше или равно левый элемент
+			// Если правый элемент больше обнаруженного максимума справа
+			if height[right] >= rightMax {
+				// Обнаруженный максимум справа равен текущему элементу справа
+				rightMax = height[right]
+			} else { // Если текущий элемент справа меньше обнаруженного максимума справа
+				// Общий уровень воды повышаем на разность обнаруженного максимума справа и значение элемента справа
+				water += rightMax - height[right]
+			}
+			// Увеличиваем указатель правого элемента
+			right--
+		}
+	}
+	// Возвращаем общий уровень воды
+	return water
+}
+
+// romanToInt
+//
+// 13. Roman to Integer
+//
+// Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+//
+// Symbol       Value
+// I             1
+// V             5
+// X             10
+// L             50
+// C             100
+// D             500
+// M             1000
+// For example, 2 is written as II in Roman numeral, just two ones added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
+//
+// Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+//
+// I can be placed before V (5) and X (10) to make 4 and 9.
+// X can be placed before L (50) and C (100) to make 40 and 90.
+// C can be placed before D (500) and M (1000) to make 400 and 900.
+// Given a roman numeral, convert it to an integer.//
+func romanToInt(s string) int {
+
+	// Создаю карту соответствия римской цифры и десятичного числа
+	m := map[uint8]int{
+		'I': 1,
+		'V': 5,
+		'X': 10,
+		'L': 50,
+		'C': 100,
+		'D': 500,
+		'M': 1000,
+	}
+
+	// Значение текущей римской цифры зависит от предыдущей
+	// previous содержит предыдущее число
+	previous := 0
+
+	// Sum содержит сумму
+	sum := 0
+
+	// Обходим строку циклом range при таком обходе текущий элемент это руна
+	for i, _ := range s {
+		// Обходить слайс нужно в обратном порядке поэтому вычисляем реверсивней указатель
+		reverseI := len(s) - i - 1
+
+		// Если число из карты по текущей руне строки меньше предыдущего числа
+		if m[s[reverseI]] < previous {
+			// Вычитаем это число из общей суммы
+			sum -= m[s[reverseI]]
+		} else { // Если число из карты по текущей руне строки не меньше предыдущего числа
+			// Увеличиваем общую сумму на это число
+			sum += m[s[reverseI]]
+		}
+		// Обновляем предыдущее число для следящей итерации цикла
+		previous = m[s[reverseI]]
+	}
+	// Возвращаем сумму
+	return sum
+}
+
+// intToRoman
+//
+// 12. Integer to Roman
+//
+// Seven different symbols represent Roman numerals with the following values:
+//
+// Symbol      Value
+// I     1
+// V     5
+// X     10
+// L     50
+// C     100
+// D     500
+// M     1000
+// Roman numerals are formed by appending the conversions of decimal place values from highest to lowest. Converting a decimal place value into a Roman numeral has the following rules:
+//
+// If the value does not start with 4 or 9, select the symbol of the maximal value that can be subtracted from the input, append that symbol to the result, subtract its value, and convert the // remainder to a Roman numeral.
+// If the value starts with 4 or 9 use the subtractive form representing one symbol subtracted from the following symbol, for example, 4 is 1 (I) less than 5 (V): IV and 9 is 1 (I) less than 10 // (X): IX. Only the following subtractive forms are used: 4 (IV), 9 (IX), 40 (XL), 90 (XC), 400 (CD) and 900 (CM).
+// Only powers of 10 (I, X, C, M) can be appended consecutively at most 3 times to represent multiples of 10. You cannot append 5 (V), 50 (L), or 500 (D) multiple times. If you need to append a // symbol 4 times use the subtractive form.
+// Given an integer, convert it to a Roman numeral.
+//
+// Example 1:
+//
+// Input: num = 3749
+//
+// Output: "MMMDCCXLIX"
+//
+// Explanation:
+//
+// 3000 = MMM as 1000 (M) + 1000 (M) + 1000 (M)
+//
+//	700 = DCC as 500 (D) + 100 (C) + 100 (C)
+//	 40 = XL as 10 (X) less of 50 (L)
+//	  9 = IX as 1 (I) less of 10 (X)
+//
+// Note: 49 is not 1 (I) less of 50 (L) because the conversion is based on decimal places
+// Example 2:
+//
+// Input: num = 58
+//
+// Output: "LVIII"
+//
+// Explanation:
+//
+// 50 = L
+//
+//	8 = VIII
+//
+// Example 3:
+//
+// Input: num = 1994
+//
+// Output: "MCMXCIV"
+//
+// Explanation:
+//
+// 1000 = M
+//
+//	900 = CM
+//	 90 = XC
+//	  4 = IV
+//
+// Constraints:
+//
+// 1 <= num <= 3999//
+func intToRoman(num int) string {
+
+	// Инициировать буфер для сбора римских цифр
+	b := bytes.Buffer{}
+
+	// Повторять цикл пока num > 0
+	for num > 0 {
+		// В конструкции switch будем определять какое максимально возможное число мы можем вычесть
+		// В каждом случае, добавляем соответствующую римскую цифру и уменьшаем num на соответствующее число
+		// пока от num ничего не останется
+		switch {
+		case num >= 1000:
+			b.WriteString("M")
+			num -= 1000
+		case num >= 900:
+			b.WriteString("CM")
+			num -= 900
+		case num >= 500:
+			b.WriteString("D")
+			num -= 500
+		case num >= 400:
+			b.WriteString("CD")
+			num -= 400
+		case num >= 100:
+			b.WriteString("C")
+			num -= 100
+		case num >= 90:
+			b.WriteString("XC")
+			num -= 90
+		case num >= 50:
+			b.WriteString("L")
+			num -= 50
+		case num >= 40:
+			b.WriteString("XL")
+			num -= 40
+		case num >= 10:
+			b.WriteString("X")
+			num -= 10
+		case num >= 9:
+			b.WriteString("IX")
+			num -= 9
+		case num >= 5:
+			b.WriteString("V")
+			num -= 5
+		case num >= 4:
+			b.WriteString("IV")
+			num -= 4
+		case num >= 1:
+			b.WriteString("I")
+			num -= 1
+		}
+	}
+	// Выводим строку полученную из буфера
+	return b.String()
+}
+
+// lengthOfLastWord
+//
+// 58. Length of Last Word
+// Given a string strs consisting of words and spaces, return the length of the last word in the string.
+//
+// A word is a maximal
+// substring
+//
+//	consisting of non-space characters only.
+//
+// Example 1:
+//
+// Input: strs = "Hello World"
+// Output: 5
+// Explanation: The last word is "World" with length 5.
+// Example 2:
+//
+// Input: strs = "   fly me   to   the moon  "
+// Output: 4
+// Explanation: The last word is "moon" with length 4.
+// Example 3:
+//
+// Input: strs = "luffy is still joyboy"
+// Output: 6
+// Explanation: The last word is "joyboy" with length 6.
+//
+// Constraints:
+//
+// 1 <= strs.length <= 104
+// strs consists of only English letters and spaces ' '.
+// There will be at least one word in strs.//
+func lengthOfLastWord(s string) int {
+
+	// Далее указатель цикла будет инициирован длиной строки минус один
+	// что приведет к панике, поэтому добавляю проверку.
+	if len(s) == 0 {
+		return 0
+	}
+
+	// Счетчик символов
+	charCount := 0
+
+	// Обходим строку в справа налево
+	for i := len(s) - 1; i >= 0; i-- {
+		// Если текущий элемент пробел
+		if s[i] == 0x20 {
+			// Если мы уже что-то посчитали
+			if charCount > 0 {
+				// Возвращаем счетчик символов
+				return charCount
+			}
+		} else { // Если не пробел
+			// Счетчик символов увеличиваем на один
+			charCount++
+		}
+	}
+
+	// Эта часть кода сработает если строка состоит только из пробелов
+	return charCount
+}
+
+// longestCommonPrefix
+//
+// 14. Longest Common Prefix
+//
+// Write a function to find the longest common prefix string amongst an array of strings.
+//
+// If there is no common prefix, return an empty string "".
+//
+// Example 1:
+//
+// Input: strs = ["flower","flow","flight"]
+// Output: "fl"
+// Example 2:
+//
+// Input: strs = ["dog","racecar","car"]
+// Output: ""
+// Explanation: There is no common prefix among the input strings.
+//
+// Constraints:
+//
+// 1 <= strs.length <= 200
+// 0 <= strs[i].length <= 200
+// strs[i] consists of only lowercase English letters if it is non-empty.//
+func longestCommonPrefix(strs []string) string {
+
+	// Далее minLength инициируется длиной первой строки в strs
+	// необходимо проверить что этот элемент есть
+	if len(strs) == 0 {
+		return ""
+	}
+
+	// Инициируем переменную minLength длиной первого элемента strs
+	minLength := len(strs[0])
+
+	// Обходим strs вычисляем минимум длины среди элементов strs
+	for i := 1; i < len(strs); i++ {
+		minLength = min(minLength, len(strs[i]))
+	}
+
+	// Если минимальная длина 0 возвращаем пустую сроку
+	if minLength == 0 {
+		return ""
+	}
+
+	// Тут крайний индекс префикса
+	prefixCharsCounter := 0
+
+	// rootLoop: это метка так как цикл может быть прерван из внутреннего цикла
+rootLoop:
+	// Цикл по диапазону [0..minLength-1]
+	for i := range minLength {
+		// Текущий байт первого элемента будет эталоном
+		// с которым будем сравнивать остальные байты элементов strs
+		reference := strs[0][i]
+		// Обходим strs
+		for j := 1; j < len(strs); j++ {
+			// Если текущий байт в текущем элементе strs не совпадает с эталоном
+			if reference != strs[j][i] {
+				// Перерываем внешний цикл rootLoop
+				break rootLoop
+			}
+		}
+		// Актуализируем крайний индекс префикса
+		prefixCharsCounter++
+	}
+
+	// Возвращаем префикс первого элемента strs
+	return strs[0][0:prefixCharsCounter]
+}
+
+// reverseWords
+//
+// 151. Reverse Words in a String
+//
+// Given an input string s, reverse the order of the words.
+//
+// A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
+//
+// Return a string of the words in reverse order concatenated by a single space.
+//
+// Note that s may contain leading or trailing spaces or multiple spaces between two words. The returned string should only have a single space separating the words. Do not include any extra // spaces.
+//
+// Example 1:
+//
+// Input: s = "the sky is blue"
+// Output: "blue is sky the"
+// Example 2:
+//
+// Input: s = "  hello world  "
+// Output: "world hello"
+// Explanation: Your reversed string should not contain leading or trailing spaces.
+// Example 3:
+//
+// Input: s = "a good   example"
+// Output: "example good a"
+// Explanation: You need to reduce multiple spaces between two words to a single space in the reversed string.
+//
+// Constraints:
+//
+// 1 <= s.length <= 104
+// s contains English letters (upper-case and lower-case), digits, and spaces ' '.
+// There is at least one word in s.
+func reverseWords(s string) string {
+
+	// Разбиваем строку на подстроки по условию
+	words := strings.Fields(s)
+
+	// Меняем порядок элементов в слайсе классическим методом
+	for i, j := 0, len(words)-1; i < j; i, j = i+1, j-1 {
+		words[i], words[j] = words[j], words[i]
+	}
+
+	// Возвращаем строку, полученную после обледенения элементов слайча через пробел
+	return strings.Join(words, " ")
+}
+
+// convert
+//
+// 6. Zigzag Conversion
+//
+// The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+//
+// P   A   H   N
+// A P L S I I G
+// Y   I   R
+// And then read line by line: "PAHNAPLSIIGYIR"
+//
+// Write the code that will take a string and make this conversion given a number of rows:
+//
+// string convert(string s, int numRows);
+//
+// Example 1:
+//
+// Input: s = "PAYPALISHIRING", numRows = 3
+// Output: "PAHNAPLSIIGYIR"
+// Example 2:
+//
+// Input: s = "PAYPALISHIRING", numRows = 4
+// Output: "PINALSIGYAHRPI"
+// Explanation:
+// P     I    N
+// A   L S  I G
+// Y A   H R
+// P     I
+// Example 3:
+//
+// Input: s = "A", numRows = 1
+// Output: "A"
+//
+// Constraints:
+//
+// 1 <= s.length <= 1000
+// s consists of English letters (lower-case and upper-case), ',' and '.'.
+// 1 <= numRows <= 1000//
+func convert(s string, numRows int) string {
+
+	// Если строка одна возвращаем ее сразу
+	if numRows == 1 {
+		return s
+	}
+
+	// Создаем слайс строк длиной numRows
+	rows := make([]string, numRows)
+	// Указательна текущую строку
+	currentRowIndex := 0
+	// Флаг движения вниз
+	directionDown := true
+
+	// Цикл по строке
+	for i := range len(s) {
+
+		// Если указатель строк на первой строке
+		if currentRowIndex == 0 {
+			// Подымаем флаг движения вниз
+			directionDown = true
+		}
+
+		// Если указатель строк на крайней строке
+		if currentRowIndex == len(rows)-1 {
+			// Опускаем флаг движения вниз
+			directionDown = false
+		}
+
+		// Добавляем символ в строку на которой указатель текущей строки
+		rows[currentRowIndex] += string(s[i])
+
+		// Если поднят флаг движения вниз
+		if directionDown {
+			// Увеличиваем указатель текущей строки
+			currentRowIndex++
+		} else { // Если не поднят флаг движения вниз
+			// Уменьшаем указатель текущей строки
+			currentRowIndex--
+		}
+	}
+
+	// Возвращаем строку из объединенного слайса строк
+	return strings.Join(rows, "")
+}
+
+// strStr
+//
+// 28. Find the Index of the First Occurrence in a String
+//
+// Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+//
+// Example 1:
+//
+// Input: haystack = "sadbutsad", needle = "sad"
+// Output: 0
+// Explanation: "sad" occurs at index 0 and 6.
+// The first occurrence is at index 0, so we return 0.
+// Example 2:
+//
+// Input: haystack = "leetcode", needle = "leeto"
+// Output: -1
+// Explanation: "leeto" did not occur in "leetcode", so we return -1.
+//
+// Constraints:
+//
+// 1 <= haystack.length, needle.length <= 104
+// haystack and needle consist of only lowercase English characters.
+func strStr(haystack string, needle string) int {
+
+	if haystack == needle {
+		return 0
+	}
+
+	// Сдвиг
+	needleIndex := 0
+
+	// Обходим строку haystack
+	for i := range len(haystack) {
+
+		if haystack[i] != needle[needleIndex] {
+			needleIndex = 0
+			continue
+		}
+
+		needleIndex++
+
+		if needleIndex == len(needle) {
+			return i - needleIndex + 1
+		}
+	}
+
+	return -1
 }
