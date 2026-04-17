@@ -86,21 +86,3 @@ func buildTree(arr []int) *TreeNode {
 	}
 	return root
 }
-
-/*
-func isValid(s string) bool {
-
-	for _, v := range s {
-
-		switch v {
-		case ']':
-
-		case ')':
-
-		case '}':
-
-		}
-	}
-
-}
-*/

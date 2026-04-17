@@ -57,3 +57,40 @@ func maxDepth(root *TreeNode) int {
 
 	return maxLevel
 }
+
+func minDepth(root *TreeNode) int {
+
+	if root == nil {
+		return 0
+	}
+
+	q := []*TreeNode{root}
+	depth := 1
+
+	for len(q) > 0 {
+
+		sz := len(q)
+
+		for _ = range sz {
+
+			currentNode := q[0]
+			q = q[1:]
+
+			if currentNode.Left == nil && currentNode.Right == nil {
+				return depth
+			}
+
+			if currentNode.Left != nil {
+				q = append(q, currentNode.Left)
+			}
+
+			if currentNode.Right != nil {
+				q = append(q, currentNode.Right)
+			}
+
+		}
+
+		depth++
+	}
+	return depth
+}
