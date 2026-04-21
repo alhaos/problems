@@ -8,7 +8,7 @@ import (
 
 func Contains(r io.Reader, seq []byte) (bool, error) {
 
-	l := len(seq)
+	l := 256
 
 	slidingBuffer := make([]byte, l*2)
 	readBuffer := make([]byte, l)
