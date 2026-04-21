@@ -1,6 +1,8 @@
 package leetcode
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestMaxDepth(t *testing.T) {
 	tests := []struct {
