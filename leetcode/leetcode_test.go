@@ -1,6 +1,7 @@
 package leetcode
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -87,4 +88,31 @@ func buildTree(arr []int) *TreeNode {
 		i++
 	}
 	return root
+}
+
+func TestGenerate(t *testing.T) {
+	testCases := []struct {
+		desc     string
+		numRows  int
+		expected [][]int
+	}{
+		{
+			desc:     "case_1",
+			numRows:  1,
+			expected: [][]int{{1}},
+		},
+		{
+			desc:     "case_5",
+			numRows:  5,
+			expected: [][]int{{1}, {1, 1}, {1, 2, 1}, {1, 3, 3, 1}, {1, 4, 6, 4, 1}},
+		},
+	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			result := generate(tC.numRows)
+			if !reflect.DeepEqual(result, tC.expected) {
+				t.Errorf("Unexpected result for test case: %s, expected: %+v, but got: %+v", tC.desc, tC.expected, result)
+			}
+		})
+	}
 }
