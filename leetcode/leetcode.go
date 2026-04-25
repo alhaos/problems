@@ -1,5 +1,11 @@
 package leetcode
 
+import (
+	"fmt"
+	"math/big"
+	"math/rand"
+)
+
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -185,12 +191,95 @@ func generate(n int) [][]int {
 			result = append(result, []int{1, 1})
 		default:
 			n := []int{1}
-			for i := 0; i < len(result[rowNumber-1])-1; i++ {
-				n = append(n, result[rowNumber-1][i]+result[rowNumber-1][i+1])
+			for i := 0; i < len(result[rowNumber-1])-2; i++ {
+				n = append(n, result[rowNumber-1][i]+result[rowNumber][i+1])
 			}
 			n = append(n, 1)
 			result = append(result, n)
 		}
 	}
 	return result
+}
+
+// 171. Excel Sheet Column Number
+func titleToNumber(columnTitle string) int {
+
+	l := len(columnTitle)
+
+	var r int
+
+	var pow func(num, factor int) int
+	pow = func(num, factor int) int {
+		n := 1
+		for range factor {
+			n *= num
+		}
+		return n
+	}
+
+	for i := l - 1; i >= 0; i-- {
+		n := int(columnTitle[i] - 0x40)
+		p := l - (i + 1)
+		r += n * pow(26, p)
+	}
+
+	return r
+
+}
+
+// 242. Valid Anagram
+func isAnagram(s string, t string) bool {
+
+	sMap := make(map[rune]int)
+	tMap := make(map[rune]int)
+
+	for _, r := range s {
+		sMap[r]++
+	}
+
+	for _, r := range t {
+		tMap[r]++
+	}
+
+	if len(sMap) != len(tMap) {
+		return false
+	}
+
+	for key, value := range sMap {
+		tValue, exist := tMap[key]
+		if !exist || tValue != value {
+			return false
+		}
+
+	}
+
+	return true
+
+}
+
+func addBinary(a string, b string) string {
+
+	var aBig big.Int
+	aBig.SetString(a, 2)
+
+	var bBig big.Int
+	bBig.SetString(b, 2)
+
+	r := *aBig.Add(&aBig, &bBig)
+
+	return fmt.Sprintf("%b", &r)
+}
+
+func RandomOddOrEven() [3]int {
+
+	var a, b, c int
+
+	for {
+		a = rand.Int()
+		b = rand.Int()
+		c = rand.Int()
+		if (a&1 == 1 && b&1 == 1 && c&1 == 1) || (a&1 == 0 && b&1 == 0 && c&1 == 0) {
+			return [3]int{a, b, c}
+		}
+	}
 }

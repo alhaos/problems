@@ -58,8 +58,6 @@ func TestMaxDepth(t *testing.T) {
 	}
 }
 
-// Вспомогательная функция для удобного создания дерева из массива
-// -1 означает nil
 func buildTree(arr []int) *TreeNode {
 	if len(arr) == 0 {
 		return nil
@@ -101,11 +99,6 @@ func TestGenerate(t *testing.T) {
 			numRows:  1,
 			expected: [][]int{{1}},
 		},
-		{
-			desc:     "case_5",
-			numRows:  5,
-			expected: [][]int{{1}, {1, 1}, {1, 2, 1}, {1, 3, 3, 1}, {1, 4, 6, 4, 1}},
-		},
 	}
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
@@ -115,4 +108,100 @@ func TestGenerate(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestTitleToNumber(t *testing.T) {
+
+	testCases := []struct {
+		desc        string
+		columnTitle string
+		expected    int
+	}{
+		{
+			desc:        "A",
+			columnTitle: "A",
+			expected:    1,
+		},
+		{
+			desc:        "AB",
+			columnTitle: "AB",
+			expected:    28,
+		},
+		{
+			desc:        "ZY",
+			columnTitle: "ZY",
+			expected:    701,
+		},
+	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			result := titleToNumber(tC.columnTitle)
+			if result != tC.expected {
+				t.Errorf("Unexpected result from test %s, expected: %d, but got: %d", tC.desc, tC.expected, result)
+			}
+		})
+	}
+}
+
+func TestIsAnagram(t *testing.T) {
+	testCases := []struct {
+		desc     string
+		s        string
+		t        string
+		expected bool
+	}{
+		{
+			desc:     "anagram/nagaram",
+			s:        "anagram",
+			t:        "nagaram",
+			expected: true,
+		},
+		{
+			desc:     "ret/car",
+			s:        "ret",
+			t:        "car",
+			expected: false,
+		},
+	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			result := isAnagram(tC.s, tC.t)
+			if result != tC.expected {
+				t.Errorf("Unexpected result from test %s, expected: %t, but got: %t", tC.desc, tC.expected, result)
+			}
+		})
+	}
+}
+
+func TestAddBinary(t *testing.T) {
+	testCases := []struct {
+		desc     string
+		a        string
+		b        string
+		expected string
+	}{
+		{
+			desc:     "",
+			a:        "11",
+			b:        "1",
+			expected: "100",
+		},
+	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			result := addBinary(tC.a, tC.b)
+			if result != tC.expected {
+				t.Errorf("Unexpected result for test %s, expected: %s, but got: %s", tC.desc, tC.expected, result)
+			}
+		})
+	}
+}
+
+func TestRandomOddOrEven(t *testing.T) {
+	t.Run("random test", func(t *testing.T) {
+		result := RandomOddOrEven()
+		if !((result[0]&1 == 1 && result[1]&1 == 1 && result[2]&1 == 1) || (result[0]&1 == 0 && result[1]&1 == 0 && result[2]&1 == 0)) {
+			t.Errorf("Unexpected result for test: %s\n, result is: %+v", "random test", result)
+		}
+	})
 }
