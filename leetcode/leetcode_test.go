@@ -205,3 +205,35 @@ func TestRandomOddOrEven(t *testing.T) {
 		}
 	})
 }
+
+func Test(t *testing.T) {
+	testCases := []struct {
+		desc     string
+		str      string
+		expected bool
+	}{
+		{
+			desc:     "#1",
+			str:      "()",
+			expected: true,
+		},
+		{
+			desc:     "#2",
+			str:      "()[]{}",
+			expected: true,
+		},
+		{
+			desc:     "#3",
+			str:      "(]",
+			expected: false,
+		},
+	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			result := isValid(tC.str)
+			if result != tC.expected {
+				t.Errorf("Unexpected result for test: %s, expected: %t, but got: %t", tC.desc, tC.expected, result)
+			}
+		})
+	}
+}
