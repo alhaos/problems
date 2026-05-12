@@ -5,8 +5,8 @@ import "math"
 func angleClock(hour int, minutes int) float64 {
 
 	const (
-		oneMinuteAngle = 6.0
-		oneHourAngle = 30.0
+		oneMinuteAngle        = 6.0
+		oneHourAngle          = 30.0
 		oneMinuteForHourAngle = .5
 	)
 
@@ -15,7 +15,7 @@ func angleClock(hour int, minutes int) float64 {
 	}
 
 	minutesAngle := float64(minutes) * oneMinuteAngle
-	hourAngle := float64(hour) * oneHourAngle + float64(minutes) * oneMinuteForHourAngle
+	hourAngle := float64(hour)*oneHourAngle + float64(minutes)*oneMinuteForHourAngle
 
 	angle := math.Abs(hourAngle - minutesAngle)
 	if angle > 180 {
