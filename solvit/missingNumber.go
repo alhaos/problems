@@ -1,6 +1,8 @@
 package solvit
 
-import "math"
+import (
+	"math"
+)
 
 func missingNumber(nums []int) int {
 
