@@ -65,3 +65,35 @@ func TestAngleClock(t *testing.T) {
 		})
 	}
 }
+
+func TestLengthOfLongestSubstring(t *testing.T) {
+	testCases := []struct {
+		desc     string
+		s        string
+		expected int
+	}{
+		{
+			desc:     "#1",
+			s:        "abcabcbb",
+			expected: 3,
+		},
+		{
+			desc:     "#2",
+			s:        "bbbbb",
+			expected: 1,
+		},
+		{
+			desc:     "#3",
+			s:        "pwwkew",
+			expected: 3,
+		},
+	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			result := lengthOfLongestSubstring(tC.s)
+			if result != tC.expected {
+				t.Errorf("Unexpected result for test %s, expected: %d, but got: %d", tC.desc, tC.expected, result)
+			}
+		})
+	}
+}

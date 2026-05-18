@@ -206,33 +206,26 @@ func TestRandomOddOrEven(t *testing.T) {
 	})
 }
 
-func Test(t *testing.T) {
+func TestThreeSum(t *testing.T) {
 	testCases := []struct {
 		desc     string
-		str      string
-		expected bool
+		nums     []int
+		expected [][]int
 	}{
 		{
-			desc:     "#1",
-			str:      "()",
-			expected: true,
-		},
-		{
-			desc:     "#2",
-			str:      "()[]{}",
-			expected: true,
-		},
-		{
-			desc:     "#3",
-			str:      "(]",
-			expected: false,
+			desc: "#1",
+			nums: []int{-1, 0, 1, 2, -1, -4},
+			expected: [][]int{
+				{-1, -1, 2},
+				{-1, 0, 1},
+			},
 		},
 	}
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
-			result := isValid(tC.str)
-			if result != tC.expected {
-				t.Errorf("Unexpected result for test: %s, expected: %t, but got: %t", tC.desc, tC.expected, result)
+			result := threeSum(tC.nums)
+			if !reflect.DeepEqual(result, tC.expected) {
+				t.Errorf("Unexpected result from test: %s, expected: %v, but got: %v", tC.desc, tC.expected, result)
 			}
 		})
 	}
