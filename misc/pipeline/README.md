@@ -44,7 +44,8 @@ for s := range out {
 
 ## Паттерн каждой стадии
 
-```
+```go
+
 func Stage(ctx context.Context, in <-chan T) <-chan T {
     out := make(chan T)
     go func() {
@@ -59,6 +60,7 @@ func Stage(ctx context.Context, in <-chan T) <-chan T {
     }()
     return out
 }
+
 ```
 
 ## Темы
