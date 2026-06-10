@@ -8,37 +8,77 @@ import (
 
 // Result структура содержит ответ
 type Result struct {
-	URL  string
+	// URL запроса
+	URL string
+	// Тело ответа
 	Body string
-	Err  error
+	// Ошибка или nil
+	Err error
 }
 
+// Fetch конкурентно возвращает содержимое urls в порядке слайса urls
+// с ограничением максимального количества одновременных HTTP запросов.
 func Fetch(urls []string, maxConcurrent int) []Result {
+
+	// Инициализация WaitGroup
 	var wg sync.WaitGroup
+
+	// Инициализация слайса результатов длинной слайа urls
 	result := make([]Result, len(urls))
+
+	// Инициализация буферизированного канала, который выступает в качестве семафора,
+	// при необходимости запустить горутину пишем туда пустую структуру (так как она не занимает места),
+	// если буфер заполнен следующая горутина попытавшаяся записать в канал получит блокировку,
+	// пока кто то не вычитает из канала, таким образом обеспечивается одновременная работа не более
+	// maxConcurrent горутин
 	semaphore := make(chan struct{}, maxConcurrent)
+
+	// Инициализация цикла по слайсу urls
 	for i := range len(urls) {
+
+		// Присваиваем полю URL i-го результата значения i-го значения urls
 		result[i].URL = urls[i]
-		wg.Add(1)
-		go func(i int) {
-			defer func() {
-				<-semaphore
-				wg.Done()
-			}()
-			semaphore <- struct{}{}
-			resp, err := http.Get(urls[i])
-			if err != nil {
-				result[i].Err = err
-				return
-			}
-			body, err := io.ReadAll(resp.Body)
-			if err != nil {
-				result[i].Err = err
-				return
-			}
-			result[i].Body = string(body)
-		}(i)
+
+		// Вызываем горутину (так не сработает в go < 1.25
+		// несколько горутим могут обрабатывать один и то же i)
+		wg.Go(
+			func() {
+				// В конце работы горутины вызываем процедуру в которой
+				defer func() {
+					// высвобождаем слот в семафоре
+					<-semaphore
+					// высвобождаем слот в WaitGroup
+					wg.Done()
+				}()
+				// занимаем слот в семафоре, если удалось двигаемся дальше
+				// если буфер полный сидим в блокировке
+				semaphore <- struct{}{}
+
+				// Выполняем запрос получаем resp и err
+				resp, err := http.Get(urls[i])
+				// Если была ошибка
+				if err != nil {
+					// У i-го результата заполняем поле Err
+					result[i].Err = err
+					// Завершаем горутину выполняется defer
+					return
+				}
+				// Вычитываем тело из запроса
+				body, err := io.ReadAll(resp.Body)
+				// Если была ошибка
+				if err != nil {
+					// У i-го результата заполняем поле Err
+					result[i].Err = err
+					// Завершаем горутину выполняется defer
+					return
+				}
+				// У i-го результата заполняем поле Body
+				result[i].Body = string(body)
+			},
+		)
 	}
+	// Ждем пока все горутины завершат работу
 	wg.Wait()
+	// Возвращаем результат
 	return result
 }
