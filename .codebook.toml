@@ -1,1 +1,4 @@
-dictionaries = ["en_us", "ru"]
+dictionaries = [
+    "en_us",
+    "ru",
+]
