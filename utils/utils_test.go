@@ -32,3 +32,5 @@ func TestNextCombination(t *testing.T) {
 		})
 	}
 }
+
+func TestNextTest
