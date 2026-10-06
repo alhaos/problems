@@ -1,5 +1,4 @@
 {
-  "userWords": [
-    "nums"
-  ]
+  "language": "en,ru",
+  "import": ["@cspell/dict-ru_ru/cspell-ext.json"]
 }
