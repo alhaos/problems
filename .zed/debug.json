@@ -10,12 +10,19 @@
     "mode": "test",
     "program": ".",
     "cwd": "$ZED_DIRNAME",
-    "args": [
-      "-test.run",
-      "^$ZED_SYMBOL$",
-      "-test.v"
-    ],
+    "args": ["-test.run", "^$ZED_SYMBOL$", "-test.v"],
     "buildFlags": [],
-    "env": {}
-  }
+    "env": {},
+  },
+  {
+    "adapter": "Delve",
+    "label": "go test ./leetcode\\insertinterval -fuzz=Fuzz -run Insert",
+    "request": "launch",
+    "mode": "test",
+    "program": ".",
+    "cwd": "$ZED_DIRNAME",
+    "args": ["-test.fuzz=Fuzz", "-test.run", "^$ZED_SYMBOL$", "-test.v"],
+    "buildFlags": [],
+    "env": {},
+  },
 ]

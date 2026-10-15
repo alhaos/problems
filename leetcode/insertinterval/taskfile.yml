@@ -1,0 +1,10 @@
+version: "3"
+
+shell: powershell
+
+tasks:
+  default:
+    cmds:
+      - |
+        cls
+        go test -v
