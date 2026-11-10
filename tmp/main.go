@@ -2,24 +2,24 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"slices"
 )
 
-const data = "12345"
-
 func main() {
-	split(data, nil)
-}
 
-func split(s string, parts []string) {
+	var a [][]int
 
-	if len(s) == 0 {
-		fmt.Println(strings.Join(parts, ","))
-		return
+	b := make([]int, 3)
+
+	for i := range len(b) {
+		b[i] = i
 	}
 
-	for i := 1; i <= len(s); i++ {
-		split(s[i:], append(parts, s[:i]))
-	}
+	a = append(a, slices.Clone(b))
 
+	b[0], b[1] = b[1], b[0]
+
+	a = append(a, b)
+
+	fmt.Println(a)
 }
