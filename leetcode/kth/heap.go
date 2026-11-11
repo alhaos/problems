@@ -5,8 +5,8 @@ type IntHeap struct {
 	data []int
 }
 
-// New creates an empty heap.
-func New() *IntHeap {
+// NewMaxHeap creates an empty heap.
+func NewMaxHeap() *IntHeap {
 	return &IntHeap{}
 }
 

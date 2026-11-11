@@ -2,11 +2,7 @@ package kth
 
 func findKthLargest(nums []int, k int) int {
 
-	h := New()
-
-	for _, n := range nums {
-		h.Push(n)
-	}
+	h := From(nums)
 
 	var result int
 
