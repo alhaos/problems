@@ -2,24 +2,13 @@ package main
 
 import (
 	"fmt"
-	"slices"
 )
 
 func main() {
 
-	var a [][]int
+	data := "H"
 
-	b := make([]int, 3)
-
-	for i := range len(b) {
-		b[i] = i
+	for i := range data[1:] {
+		fmt.Print(i)
 	}
-
-	a = append(a, slices.Clone(b))
-
-	b[0], b[1] = b[1], b[0]
-
-	a = append(a, b)
-
-	fmt.Println(a)
 }
