@@ -1,5 +1,6 @@
 {
   "userWords": [
+    "i := 0; i < len(nums); i++",
     "nums"
   ]
 }
